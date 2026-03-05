@@ -41,7 +41,15 @@ st.markdown("""
         border-radius: 12px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
-    
+
+
+    # --- LIVE SOLAR MONITOR (NASA/NOAA FLUX) ---
+    st.sidebar.write("---")
+    st.sidebar.subheader("Live GOES-16 X-Ray Flux")
+    # Ce lien pointe vers l'image mise à jour toutes les minutes par la NOAA
+    solar_url = "https://services.swpc.noaa.gov/images/swx-overview-large.gif"
+    st.sidebar.image(solar_url, caption="Real-time Solar Activity (NOAA)", use_container_width=True)
+
     /* Sidebar styling */
     section[data-testid="stSidebar"] {
         background-color: #111827;
@@ -188,3 +196,4 @@ st.error(f"""
 # --- FOOTER ---
 st.write("---")
 st.caption("NOVA Project | Data Source: NASA DONKI & NOAA SWPC | Compliance: CC0 Public Domain / No MNPI / MiFID II Compliant Signal")
+
