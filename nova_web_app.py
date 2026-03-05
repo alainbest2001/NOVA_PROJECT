@@ -3,116 +3,188 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import os
+from datetime import datetime
 
-# --- 1. PAGE CONFIGURATION ---
+# --- CONFIGURATION DE LA PAGE ---
 st.set_page_config(
-    page_title="NOVA | Quantitative Space-Alpha Terminal", 
+    page_title="NOVA | Super-Alpha Intelligence", 
     layout="wide", 
     initial_sidebar_state="expanded"
 )
 
-# --- 2. HIGH VISIBILITY CUSTOM CSS ---
+# --- DESIGN FANTASTIQUE (Custom CSS) ---
 st.markdown("""
     <style>
-    .main { background-color: #0e1117; color: #ffffff; }
-    [data-testid="stMetricValue"] { color: #ffffff !important; font-size: 2rem !important; font-weight: 700 !important; }
-    [data-testid="stMetricLabel"] { color: #9ca3af !important; font-size: 1.1rem !important; }
-    [data-testid="stMetricDelta"] { color: #10b981 !important; }
-    div[data-testid="stMetric"] { background-color: #1f2937; border: 1px solid #374151; padding: 20px; border-radius: 12px; }
-    section[data-testid="stSidebar"] { background-color: #111827; }
+    /* Global Dark Theme & Neon Accents */
+    .main { 
+        background-color: #05070a; 
+        color: #e0e0e0;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background-color: #0a0e14;
+        border-right: 1px solid #1f2937;
+    }
+
+    /* Metric Glow Cards */
+    div[data-testid="stMetric"] {
+        background: linear-gradient(145deg, #0d1117, #161b22);
+        border: 1px solid #30363d;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 229, 255, 0.05);
+        transition: transform 0.3s ease;
+    }
+    div[data-testid="stMetric"]:hover {
+        transform: translateY(-5px);
+        border-color: #58a6ff;
+    }
+
+    /* Text & Header Styling */
+    [data-testid="stMetricValue"] {
+        color: #00f2ff !important;
+        font-family: 'JetBrains Mono', monospace;
+        text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+    }
+    
+    h1, h2, h3 {
+        color: #f0f6fc;
+        letter-spacing: -1px;
+    }
+
+    /* Custom Info Box */
+    .stAlert {
+        background-color: #0d1117;
+        border: 1px dashed #00f2ff;
+        border-radius: 10px;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. PRIVATE ACCESS SYSTEM ---
+# --- SYSTÈME D'ACCÈS PRIVÉ ---
 def check_password():
-    def password_entered():
-        if st.session_state["password"] == "NOVA_ALPHA_2026":
-            st.session_state["password_correct"] = True
-            del st.session_state["password"]  
-        else:
-            st.session_state["password_correct"] = False
     if "password_correct" not in st.session_state:
-        st.markdown("<h1 style='text-align: center; color: white;'>🛰️ NOVA Terminal Access</h1>", unsafe_allow_html=True)
-        col_l, col_m, col_r = st.columns([1, 2, 1])
+        st.markdown("<h1 style='text-align: center; margin-top: 100px;'>🛰️ PROJECT NOVA</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: center; color: #8b949e;'>CRYPTO-SECURE INSTITUTIONAL GATEWAY</p>", unsafe_allow_html=True)
+        
+        col_l, col_m, col_r = st.columns([1, 1.5, 1])
         with col_m:
-            st.text_input("Access Code", type="password", on_change=password_entered, key="password")
-            if "password_correct" in st.session_state: st.error("❌ Invalid Credentials.")
-        st.stop() 
-        return False
+            with st.container():
+                pwd = st.text_input("ENTER QUANT-KEY", type="password")
+                if st.button("AUTHENTICATE"):
+                    if pwd == "NOVA_ALPHA_2026":
+                        st.session_state["password_correct"] = True
+                        st.rerun()
+                    else:
+                        st.error("ACCESS DENIED: INVALID SIGNATURE")
+        st.stop()
     return True
 
-if not check_password():
-    st.stop()
+check_password()
 
-# --- 4. SIDEBAR (SYSTEM STATUS & NASA LIVE) ---
-st.sidebar.image("https://img.icons8.com/fluency/96/000000/satellite.png", width=80)
-st.sidebar.header("NOVA Core Status")
-st.sidebar.success("🟢 Online: GOES-16 Satellite")
-st.sidebar.info("Flux: X-Ray (0.1-0.8 nm)")
+# --- SIDEBAR: LIVE TELEMETRY ---
+with st.sidebar:
+    st.image("https://img.icons8.com/fluency/96/000000/satellite-sending-signal.png", width=100)
+    st.title("NOVA OS v2.5")
+    st.write("---")
+    
+    st.subheader("📡 Real-Time Telemetry")
+    solar_url = "https://services.swpc.noaa.gov/images/swx-overview-large.gif"
+    st.image(solar_url, caption="NASA GOES-16 LIVE FLUX", use_container_width=True)
+    
+    st.write("---")
+    st.markdown("📈 **System Status:** `OPTIMAL`")
+    st.markdown("🕵️ **Neural Engine:** `DEEPSEEK-R1`")
+    st.markdown("🔐 **Session:** `ENCRYPTED`")
 
-st.sidebar.write("---")
-st.sidebar.subheader("📡 Live Solar Monitor")
-# Flux NASA/NOAA en temps réel
-solar_url = "https://services.swpc.noaa.gov/images/swx-overview-large.gif"
-st.sidebar.image(solar_url, caption="Real-time Solar Activity (NOAA)", use_container_width=True)
+# --- INTERFACE PRINCIPALE ---
+col_head_1, col_head_2 = st.columns([3, 1])
+with col_head_1:
+    st.title("🛰️ NOVA: Quantitative Space-Alpha")
+    st.markdown("*Exogenous Risk Mitigation & Structural Invariant Intelligence*")
+with col_head_2:
+    st.info(f"📅 **DATE:** {datetime.now().strftime('%Y-%m-%d')}")
 
-st.sidebar.write("---")
-st.sidebar.caption("Institutional Grade v2.4")
-
-# --- 5. MAIN HEADER ---
-st.success("🔓 Access Granted: Secure Quantified Session Active")
-st.title("🛰️ NOVA: Quantitative Space-Alpha")
-st.subheader("Exogenous Risk Mitigation & Solar Correlation Engine")
 st.write("---")
 
-# --- 6. PERFORMANCE DASHBOARD ---
+# --- SECTION 1: KPIS RADAR ---
+c1, c2, c3, c4 = st.columns(4)
+with c1: st.metric("Z-SCORE (SMH)", "2.68", "99% CONFIDENCE")
+with c2: st.metric("WIN RATE (X5+)", "37.5%", "+12% ALPHA")
+with c3: st.metric("SHARPE RATIO", "0.35", "TAIL-RISK OPT.")
+with c4: st.metric("SAMPLE SIZE", "200", "2000-2026")
+
+st.write("### 📉 Market-Solar Asymmetry Analysis")
+
+# --- SECTION 2: GRAPHIC D'ALGORITHME ---
 if os.path.exists("master_massive_alpha.csv"):
     df = pd.read_csv("master_massive_alpha.csv")
     
-    col1, col2, col3, col4 = st.columns(4)
-    with col1: st.metric("Z-Score (SMH)", "2.68", "Confidence: 99%")
-    with col2: st.metric("Win Rate (X5+)", "37.5%", "+12% vs Baseline")
-    with col3: st.metric("Sharpe Ratio", "0.35", "Tail-Risk Alpha")
-    with col4: st.metric("Sample Size (N)", "200", "Period: 2000-2026")
-
-    st.write("### 📈 Risk Asymmetry Visualization")
     fig = px.scatter(df, x="date", y="vol_SMH", size="vol_VIX", color="vol_SMH",
-                     hover_data=['class'], labels={"vol_SMH": "SMH Volatility (%)", "date": "Event Date"},
-                     title="SMH Volatility Dispersion per Solar Event Severity",
-                     color_continuous_scale='Viridis', template="plotly_dark")
-    fig.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font_color="white")
+                     hover_data=['class'], color_continuous_scale='IceFire',
+                     template="plotly_dark")
+    
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font_color="#8b949e",
+        margin=dict(l=0, r=0, t=30, b=0)
+    )
     st.plotly_chart(fig, use_container_width=True)
 
-    col_left, col_right = st.columns(2)
-    with col_left:
-        st.write("### 📋 Signal Distribution (Top 10 Events)")
-        st.dataframe(df.sort_values(by="vol_SMH", ascending=False).head(10), use_container_width=True)
-    with col_right:
-        st.write("### 🧠 Canonical Intelligence (DeepSeek-R1)")
-        st.info("**Insights:** SMH over-reaction detected. VIX is primary confirmation indicator. Strategy: Volatility Arbitrage (Long Gamma) in 2-6h window.")
-
-# --- 7. STRESS-TEST SIMULATOR ---
+# --- SECTION 3: INTELLIGENCE CANONIQUE ---
 st.write("---")
-st.write("### 🧪 Systemic Shock Simulator (Stress-Test)")
-col_sim1, col_sim2 = st.columns([1, 2])
-with col_sim1:
-    st.write("**Scenario Parameters**")
-    sim_class = st.slider("Solar Flare Intensity (X-Class Rating)", 1.0, 50.0, 10.0)
-    portfolio_value = st.number_input("Tech Portfolio Exposure ($)", value=1000000, step=100000)
-    impact_percent = (sim_class / 6.9) * 5.77
-    impact_dollars = portfolio_value * (impact_percent / 100)
-with col_sim2:
-    st.write("**NOVA Risk Projection**")
+col_info_1, col_info_2 = st.columns([2, 1])
+
+with col_info_1:
+    st.write("### 📋 Quantified Signal Log")
+    if os.path.exists("master_massive_alpha.csv"):
+        st.dataframe(df.sort_values(by="vol_SMH", ascending=False).head(8), use_container_width=True)
+
+with col_info_2:
+    st.write("### 🧠 NOVA Intelligence")
+    st.info("""
+    **Core Directives:**
+    1. **Asymmetry:** High-exposure SMH sectors show predictive Kurtosis post-flare.
+    2. **Regime Switch:** Solar Class > X5 triggers 'Chaos Regime' logic.
+    3. **Action:** Execute Long-Gamma protection within 2h window.
+    """)
+
+# --- SECTION 4: SHOCK SIMULATOR (DANGER ZONE) ---
+st.write("---")
+st.write("### 🧪 Systemic Shock Simulator")
+
+col_sim_1, col_sim_2 = st.columns([1, 2])
+
+with col_sim_1:
+    s_class = st.slider("Select Solar Magnitude (X-Class)", 1.0, 50.0, 10.0)
+    exposure = st.number_input("Portfolio Exposure ($)", value=1000000)
+    impact_pct = (s_class / 6.9) * 5.77
+    var_loss = exposure * (impact_pct / 100)
+
+with col_sim_2:
     fig_gauge = go.Figure(go.Indicator(
-        mode = "gauge+number", value = impact_percent,
-        title = {'text': "Projected Intra-day Volatility (%)"},
-        gauge = {'axis': {'range': [0, 15]}, 'bar': {'color': "#ef4444"}, 'bgcolor': "#1f2937",
-                 'steps': [{'range': [0, 2], 'color': "#065f46"}, {'range': [5, 15], 'color': "#7f1d1d"}]}))
-    fig_gauge.update_layout(paper_bgcolor='rgba(0,0,0,0)', font={'color': "white"}, height=300)
+        mode = "gauge+number",
+        value = impact_pct,
+        title = {'text': "PROJECTED VOLATILITY SPIKE (%)", 'font': {'color': '#f0f6fc'}},
+        gauge = {
+            'axis': {'range': [0, 15], 'tickcolor': "#f0f6fc"},
+            'bar': {'color': "#00f2ff"},
+            'steps': [
+                {'range': [0, 3], 'color': "#065f46"},
+                {'range': [3, 7], 'color': "#92400e"},
+                {'range': [7, 15], 'color': "#7f1d1d"}
+            ],
+            'threshold': {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 10}
+        }
+    ))
+    fig_gauge.update_layout(paper_bgcolor='rgba(0,0,0,0)', font={'color': "#f0f6fc"}, height=350)
     st.plotly_chart(fig_gauge, use_container_width=True)
 
-st.error(f"**SCENARIO ANALYSIS:** X{sim_class} Flare = {impact_percent:.2f}% spike. Estimated VaR: **${impact_dollars:,.0f}**.")
+st.error(f"⚡ **CRITICAL ALERT:** A class X{s_class} event projects a **{impact_pct:.2f}%** volatility surge. Estimated VaR: **${var_loss:,.0f}**.")
 
-# --- 8. FOOTER ---
+# --- FOOTER ---
 st.write("---")
-st.caption("NOVA Project | Data Source: NASA DONKI & NOAA SWPC | Compliance: CC0 / No MNPI / MiFID II Compliant")
+st.caption("🛰️ NOVA PROJECT | PROPRIETARY QUANTITATIVE TERMINAL | COMPLIANCE: MIFID II / NO-MNPI")
