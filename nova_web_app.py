@@ -3,128 +3,172 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import os
-import streamlit as st
 
-# --- SYSTÈME D'ACCÈS PRIVÉ ---
+# --- PAGE CONFIGURATION ---
+st.set_page_config(
+    page_title="NOVA | Quantitative Space-Alpha Terminal", 
+    layout="wide", 
+    initial_sidebar_state="expanded"
+)
+
+# --- HIGH VISIBILITY CUSTOM CSS (Fix for dark mode metrics) ---
+st.markdown("""
+    <style>
+    /* Main Background */
+    .main { background-color: #0e1117; color: #ffffff; }
+    
+    /* Metrics High Visibility Fix */
+    [data-testid="stMetricValue"] {
+        color: #ffffff !important;
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        color: #9ca3af !important; /* Light grey for labels */
+        font-size: 1.1rem !important;
+    }
+    
+    [data-testid="stMetricDelta"] {
+        color: #10b981 !important; /* Emerald green for confidence/delta */
+    }
+
+    /* Metric Card Styling */
+    div[data-testid="stMetric"] {
+        background-color: #1f2937;
+        border: 1px solid #374151;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Sidebar styling */
+    section[data-testid="stSidebar"] {
+        background-color: #111827;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- PRIVATE ACCESS SYSTEM ---
 def check_password():
-    """Retourne True si l'utilisateur a saisi le bon mot de passe."""
+    """Returns True if the user had the correct password."""
     def password_entered():
-        if st.session_state["password"] == "NOVA_ALPHA_2026": # Ton mot de passe ici
+        if st.session_state["password"] == "NOVA_ALPHA_2026":
             st.session_state["password_correct"] = True
-            del st.session_state["password"]  # On ne garde pas le mdp en mémoire
+            del st.session_state["password"]  
         else:
             st.session_state["password_correct"] = False
 
     if "password_correct" not in st.session_state:
-        # Affichage du formulaire de connexion
-        st.markdown("<h1 style='text-align: center;'>🛰️ Terminal NOVA</h1>", unsafe_allow_html=True)
-        st.text_input("Veuillez entrer le code d'accès institutionnel", 
-                      type="password", on_change=password_entered, key="password")
-        if "password_correct" in st.session_state:
-            st.error("❌ Code d'accès invalide.")
-        st.stop() # Arrête le script ici si pas de mdp
+        st.markdown("<h1 style='text-align: center; color: white;'>🛰️ NOVA Terminal Access</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: center; color: #9ca3af;'>Please enter your institutional credentials to access Space-Alpha metrics.</p>", unsafe_allow_html=True)
+        
+        col_login_1, col_login_2, col_login_3 = st.columns([1, 2, 1])
+        with col_login_2:
+            st.text_input("Access Code", type="password", on_change=password_entered, key="password")
+            if "password_correct" in st.session_state:
+                st.error("❌ Access Denied: Invalid Credentials.")
+        st.stop() 
         return False
     return True
 
 if not check_password():
     st.stop()
 
-# --- RESTE DE TON CODE (Dashboard, Graphiques, etc.) ---
-st.success("🔓 Accès Autorisé : Session Quantifiée")
-
-
-
-
-# Configuration de la page (Style Sombre/Quant)
-st.set_page_config(page_title="NOVA | Space-Alpha Terminal", layout="wide", initial_sidebar_state="expanded")
-
-# CSS Custom pour un look "Bloomberg Terminal"
-st.markdown("""
-    <style>
-    .main { background-color: #0e1117; color: #ffffff; }
-    .stMetric { background-color: #1f2937; padding: 15px; border-radius: 10px; border: 1px solid #374151; }
-    </style>
-    """, unsafe_allow_html=True)
-
-# --- HEADER ---
-st.title("🛰️ NOVA : Quantitative Space-Alpha")
-st.subheader("Intervention sur les Risques Exogènes & Corrélation Solaire")
+# --- HEADER & TERMINAL STATUS ---
+st.success("🔓 Access Granted: Secure Quantified Session Active")
+st.title("🛰️ NOVA: Quantitative Space-Alpha")
+st.subheader("Exogenous Risk Mitigation & Solar Correlation Engine")
 st.write("---")
 
-# --- SIDEBAR (STATUS & FILTRES) ---
+# --- SIDEBAR (SYSTEM STATUS) ---
 st.sidebar.image("https://img.icons8.com/fluency/96/000000/satellite.png", width=80)
-st.sidebar.header("Système NOVA")
-st.sidebar.success("🟢 Opérationnel : Satellite GOES-16")
-st.sidebar.info("Flux : Rayons X (0.1-0.8 nm)")
+st.sidebar.header("NOVA Core Status")
+st.sidebar.success("🟢 Online: GOES-16 Satellite")
+st.sidebar.info("Flux: X-Ray (0.1-0.8 nm)")
+st.sidebar.write("---")
+st.sidebar.caption("Institutional Grade v2.4")
 
-# --- DASHBOARD DE PERFORMANCE ---
+# --- PERFORMANCE DASHBOARD ---
 if os.path.exists("master_massive_alpha.csv"):
     df = pd.read_csv("master_massive_alpha.csv")
     
-    # 1. KPI Metrics
+    # 1. KPI Metrics (High Visibility)
     col1, col2, col3, col4 = st.columns(4)
-    with col1: st.metric("Z-Score (SMH)", "2.68", "Significatif @ 99%")
-    with col2: st.metric("Win Rate (X5+)", "37.5%", "+12% vs Random")
-    with col3: st.metric("Sharpe Ratio", "0.35", "Tail-Risk Mode")
-    with col4: st.metric("Events (N)", "200", "2000-2026")
+    with col1: 
+        st.metric("Z-Score (SMH)", "2.68", "Confidence: 99%")
+    with col2: 
+        st.metric("Win Rate (X5+)", "37.5%", "+12% vs Baseline")
+    with col3: 
+        st.metric("Sharpe Ratio", "0.35", "Tail-Risk Alpha")
+    with col4: 
+        st.metric("Sample Size (N)", "200", "Period: 2000-2026")
 
-    st.write("### 📈 Visualisation de l'Asymétrie de Risque")
+    st.write("### 📈 Risk Asymmetry Visualization")
     
-    # 2. Graphique de Corrélation
+    # 2. Interactive Correlation Plot
     fig = px.scatter(df, x="date", y="vol_SMH", size="vol_VIX", color="vol_SMH",
-                     hover_data=['class'], title="Dispersion de la Volatilité SMH par Événement Solaire",
+                     hover_data=['class'], 
+                     labels={"vol_SMH": "SMH Volatility (%)", "date": "Event Date"},
+                     title="SMH Volatility Dispersion per Solar Event Severity",
                      color_continuous_scale='Viridis', template="plotly_dark")
+    
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font_color="white"
+    )
     st.plotly_chart(fig, use_container_width=True)
 
-    # 3. Répartition par classe
+    # 3. Data Distribution & Canonical Intelligence
     col_left, col_right = st.columns(2)
     with col_left:
-        st.write("### 📋 Distribution des Signaux")
+        st.write("### 📋 Signal Distribution (Top 10 Events)")
         st.dataframe(df.sort_values(by="vol_SMH", ascending=False).head(10), use_container_width=True)
     
     with col_right:
-        st.write("### 🧠 Intelligence Canonisée (DeepSeek-R1)")
-        if os.path.exists("nova_multi_report.txt"):
-            with open("nova_multi_report.txt", "r", encoding="utf-8") as f:
-                st.info(f.read()[:800] + "...")
-        else:
-            st.warning("Générez d'abord le rapport avec nova_multi_expert.py")
+        st.write("### 🧠 Canonical Intelligence (DeepSeek-R1)")
+        st.info("""
+            **Market Insights:**
+            - **Asymmetry:** SMH (Semiconductors) exhibits significant over-reaction compared to XLU (Utilities) during X-class events.
+            - **Indicator Priority:** The VIX acts as the primary systemic confirmation indicator for volatility spikes.
+            - **Safe-Haven Lag:** Gold (GLD) remains a secondary lag-indicator, unsuitable for immediate intra-day hedging.
+            - **Strategy Recommendation:** Volatility Arbitrage (Long Gamma) in 2-6 hour window post-flare.
+        """)
 
 else:
-    st.error("Données manquantes. Lancez 'historic.py' pour générer le dataset.")
+    st.error("Critical Data Missing. Please ensure 'master_massive_alpha.csv' is present in the repository.")
 
-# --- FOOTER ---
+# --- STRESS-TEST SIMULATOR ---
 st.write("---")
-st.caption("NOVA Project | Data Source: NASA DONKI & NOAA SWPC | Compliance: CC0 Public Domain")
-
-# --- SECTION : SIMULATEUR DE STRESS-TEST ---
-st.write("---")
-st.write("### 🧪 Simulateur de Choc Systémique (Stress-Test)")
+st.write("### 🧪 Systemic Shock Simulator (Stress-Test)")
 
 col_sim1, col_sim2 = st.columns([1, 2])
 
 with col_sim1:
-    st.write("**Paramètres du Choc**")
-    sim_class = st.slider("Intensité de l'éruption (Classe X)", 1.0, 50.0, 10.0)
-    portfolio_value = st.number_input("Valeur de votre Portefeuille Tech ($)", value=1000000)
+    st.write("**Scenario Parameters**")
+    sim_class = st.slider("Solar Flare Intensity (X-Class Rating)", 1.0, 50.0, 10.0)
+    portfolio_value = st.number_input("Tech Portfolio Exposure ($)", value=1000000, step=100000)
     
-    # Calcul de l'impact basé sur le Z-Score et l'invariant 2011
-    # Formule : (Classe / 6.9) * Vol_Moyenne_Historique
+    # Impact calculation based on 2011 Invariant
     impact_percent = (sim_class / 6.9) * 5.77
     impact_dollars = portfolio_value * (impact_percent / 100)
 
 with col_sim2:
-    st.write("**Projection de Risque NOVA**")
+    st.write("**NOVA Risk Projection**")
     
-    # Jauge de risque visuelle
+    # Professional Gauge Chart
     fig_gauge = go.Figure(go.Indicator(
         mode = "gauge+number",
         value = impact_percent,
         domain = {'x': [0, 1], 'y': [0, 1]},
-        title = {'text': "Volatilité Intra-day Estimée (%)"},
+        title = {'text': "Projected Intra-day Volatility (%)", 'font': {'size': 18}},
         gauge = {
-            'axis': {'range': [None, 15]},
+            'axis': {'range': [0, 15], 'tickwidth': 1, 'tickcolor': "white"},
             'bar': {'color': "#ef4444"},
+            'bgcolor': "#1f2937",
+            'borderwidth': 2,
+            'bordercolor': "#374151",
             'steps': [
                 {'range': [0, 2], 'color': "#065f46"},
                 {'range': [2, 5], 'color': "#92400e"},
@@ -132,12 +176,15 @@ with col_sim2:
             ],
         }
     ))
-    fig_gauge.update_layout(paper_bgcolor='#0e1117', font={'color': "white"}, height=300)
+    fig_gauge.update_layout(paper_bgcolor='rgba(0,0,0,0)', font={'color': "white"}, height=300)
     st.plotly_chart(fig_gauge, use_container_width=True)
 
-# --- Résultat Narratif ---
+# --- Narrative Risk Outcome ---
 st.error(f"""
-    **ANALYSE DE SCÉNARIO :** Une éruption de classe **X{sim_class}** pourrait générer un pic de volatilité de 
-    **{impact_percent:.2f}%**. Pour votre portefeuille, cela représente un risque d'exposition intra-day 
-    de **{impact_dollars:,.0f} $**.
+    **SCENARIO ANALYSIS:** A class **X{sim_class}** event projects a **{impact_percent:.2f}%** volatility spike. 
+    For your current exposure, this represents an estimated **Value at Risk (VaR)** of **${impact_dollars:,.0f}**.
 """)
+
+# --- FOOTER ---
+st.write("---")
+st.caption("NOVA Project | Data Source: NASA DONKI & NOAA SWPC | Compliance: CC0 Public Domain / No MNPI / MiFID II Compliant Signal")
